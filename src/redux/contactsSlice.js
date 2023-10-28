@@ -1,4 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit/dist';
+import { getContacts, addNewContact } from 'services/api';
+
+export const fetchContacts = createAsyncThunk(
+  'contacts/fetchAll',
+  async (_, thunkAPI) => {
+    try {
+      const contactsData = await getContacts();
+      return contactsData;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const addContact = createAsyncThunk(
+  'contacts/addContact',
+  async (contact, thunkAPI) => {
+    try {
+      const contactsData = await addNewContact();
+      return contactsData;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 const INITIAL_STATE = {
   contactsData: [],
@@ -13,53 +38,33 @@ const contactsSlice = createSlice({
   initialState: INITIAL_STATE,
   // Об'єкт редюсерів
   reducers: {
-    addContact(state, action) {
-      state.contactsData = [...state.contactsData, action.payload];
-      // state.contactsData.push(action.payload)
-    },
+    // addContact(state, action) {
+    //   state.contactsData = [...state.contactsData, action.payload];
+    //   // state.contactsData.push(action.payload)
+    // },
     deleteContact(state, action) {
       state.contactsData = state.contactsData.filter(
         contactData => contactData.id !== action.payload
       );
     },
   },
+  extraReducers: builder =>
+    builder
+      .addCase(fetchContacts.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.contactsData = action.payload;
+      })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      }),
 });
 
 // Генератори екшенів
-export const { addContact, deleteContact } = contactsSlice.actions;
+export const { deleteContact } = contactsSlice.actions;
 // Редюсер слайсу
 export const contactsReducer = contactsSlice.reducer;
-
-// export const contactsReducer = (state = INITIAL_STATE, action) => {
-//   switch (action.type) {
-//     case 'contacts/addContacts': {
-//       return {
-//         ...state,
-//         contactsData: [...state.contactsData, action.payload],
-//       };
-//     }
-//     case 'contacts/deleteContacts': {
-//       return {
-//         ...state,
-//         contactsData: state.contactsData.filter(
-//           contactData => contactData.id !== action.payload
-//         ),
-//       };
-//     }
-//     default:
-//       return state;
-//   }
-// };
-
-// export const addContacts = payload => {
-//   return {
-//     type: 'contacts/addContacts',
-//     payload,
-//   };
-// };
-// export const deleteContacts = payload => {
-//   return {
-//     type: 'contacts/deleteContacts',
-//     payload,
-//   };
-// };

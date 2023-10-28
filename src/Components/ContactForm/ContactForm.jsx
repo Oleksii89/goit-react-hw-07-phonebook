@@ -39,7 +39,7 @@ const ContactForm = () => {
       contact => contact.name.toLowerCase() === data.name.toLowerCase()
     )
       ? alert(`${data.name} is already in contacts`)
-      : dispatch(addContact(data));
+      : dispatch(addContact(data.name));
   };
 
   return (

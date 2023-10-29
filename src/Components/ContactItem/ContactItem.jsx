@@ -4,11 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact, fetchContacts } from 'redux/contactsSlice';
 import { useEffect } from 'react';
 import { Loader } from 'Components/Loader/Loader';
+import {
+  selectContacts,
+  selectContactsError,
+  selectContactsIsLoading,
+} from 'redux/contacts.selectors';
 
 export const ContactIem = () => {
-  const contacts = useSelector(state => state.contacts.contactsData);
-  const isLoading = useSelector(state => state.isLoading);
-  const error = useSelector(state => state.contacts.error);
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectContactsIsLoading);
+  const error = useSelector(selectContactsError);
 
   const filter = useSelector(state => state.filter.filterData);
   const dispatch = useDispatch();

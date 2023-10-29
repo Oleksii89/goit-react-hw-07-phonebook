@@ -1,25 +1,18 @@
 import axios from 'axios';
 
-export const getContacts = async () => {
-  const { data } =
-    await axios.get(`https://653cc41fd5d6790f5ec84281.mockapi.io/contacts
-`);
-  console.log(data);
+const contactsInstance = axios.create({
+  baseURL: 'https://653cc41fd5d6790f5ec84281.mockapi.io',
+});
+
+export const requestContacts = async () => {
+  const { data } = await contactsInstance.get(`/contacts`);
   return data;
 };
-
-// getContacts();
-
-export const addNewContact = async contact => {
-  const { data } = await axios.post(
-    `https://653cc41fd5d6790f5ec84281.mockapi.io/contacts/`,
-    contact
-  );
+export const requestAddContact = async newContact => {
+  const { data } = await contactsInstance.post(`/contacts`, newContact);
   return data;
 };
-// export const deleteContact = async () => {
-//   const { data } =
-//     await axios.delete(`https://653cc41fd5d6790f5ec84281.mockapi.io/contacts/:id
-// `);
-//   return data;
-// };
+export const requestDeleteContact = async contactId => {
+  const { data } = await contactsInstance.delete(`/contacts/${contactId}`);
+  return data;
+};

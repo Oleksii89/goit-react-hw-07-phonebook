@@ -17,22 +17,3 @@ const filterSlice = createSlice({
 export const { setFilter } = filterSlice.actions;
 
 export const filterReducer = filterSlice.reducer;
-
-// export const filterReducer = (state = INITIAL_STATE, action) => {
-//   switch (action.type) {
-//     case 'filter/setFilter':
-//       return {
-//         filterData: action.payload,
-//       };
-
-//     default:
-//       return state;
-//   }
-// };
-
-// export const setFilter = payload => {
-//   return {
-//     type: 'filter/setFilter',
-//     payload,
-//   };
-// };

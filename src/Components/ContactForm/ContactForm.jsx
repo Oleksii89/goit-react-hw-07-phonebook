@@ -29,7 +29,9 @@ const ContactForm = () => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    getContact({ name: name, number: number, id: nanoid() });
+
+    getContact({ name: name, phone: number, id: nanoid() });
+    // evt.currentTarget.reset();
     setName(''); // clear input
     setNumber(''); // clear input
   };
@@ -39,7 +41,7 @@ const ContactForm = () => {
       contact => contact.name.toLowerCase() === data.name.toLowerCase()
     )
       ? alert(`${data.name} is already in contacts`)
-      : dispatch(addContact(data.name));
+      : dispatch(addContact(data));
   };
 
   return (
